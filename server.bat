@@ -4,6 +4,11 @@ set image=postgres
 set tag=12.3
 set name=pg-branch
 
+rem ეს იმიჯი უბრალოდ პოსტგრეს უშვებს ბრენჩინიგისთვის
+
+rem აქ ხდება .config ფაილის კონტენტის ცვლადებად გამოცხადება
+for /f "delims== tokens=1,2" %%G in (.config) do set %%G=%%H
+
 rem ყველა ამ იმიჯის კონტეინერს ვაჩერებთ
 for /f "tokens=* delims=" %%a in (
   '"docker container ls -q --filter name=%name%*"'
@@ -21,10 +26,10 @@ docker network create pg
 
 rem ვქმნით ბოლოს დაბილდულ კონტეინერს
 docker run -d --name %name%^
-    -e POSTGRES_PASSWORD=1234^
+    -e POSTGRES_PASSWORD=%PG_BRANCH_PASSWORD%^
     -e PGDATA=/var/lib/postresql/data^
     -v %volume%:/var/lib/postresql/data^
-    -p 5436:5432^
+    -p %PG_BRANCH_EXPOSE%:5432^
     --net pg^
     %image%:%tag%
 

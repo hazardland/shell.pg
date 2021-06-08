@@ -10,13 +10,13 @@ rem ჩამოგვაქვს ბოლო ვერსია ყველ�
 git pull
 
 set image=pg-dev
-set tag=0.0.7
+set tag=0.0.17
 set name=%image%
 
 rem აქ ხდება .config ფაილის კონტენტის ცვლადებად გამოცხადება
 for /f "delims== tokens=1,2" %%G in (.config) do set %%G=%%H
 
-docker build -t %image%:%tag% --build-arg GIT_USER_NAME=%GIT_USER_NAME% --build-arg GIT_USER_EMAIL=%GIT_USER_EMAIL% -f Dockerfile .
+docker build -t %image%:%tag% --build-arg IMAGE_VERSION=%tag% --build-arg GIT_USER_NAME=%GIT_USER_NAME% --build-arg GIT_USER_EMAIL=%GIT_USER_EMAIL% -f Dockerfile .
 
 rem ყველა ამ იმიჯის კონტეინერს ვაჩერებთ
 for /f "tokens=* delims=" %%a in (
@@ -37,12 +37,16 @@ rem ვქმნით ბოლოს დაბილდულ კონტე�
 docker run -d --name %name%-%tag%^
     -e POSTGRES_PASSWORD=1234^
     -e PGDATA=/var/lib/postresql/data^
-    -e PG_BRANCH_HOSTNAME=pg-branch^
-    -e PG_BRANCH_USERNAME=postgres^
-    -e PG_BRANCH_PASSWORD=1234^
-    -e PG_BRANCH_PORT=5432^
+    -e PG_BRANCH_HOSTNAME=%PG_BRANCH_HOSTNAME%^
+    -e PG_BRANCH_USERNAME=%PG_BRANCH_USERNAME%^
+    -e PG_BRANCH_PASSWORD=%PG_BRANCH_PASSWORD%^
+    -e PG_BRANCH_PORT=%PG_BRANCH_PORT%^
+    -e PG_DEV_HOSTNAME=%PG_DEV_HOSTNAME%^
+    -e PG_DEV_USERNAME=%PG_DEV_USERNAME%^
+    -e PG_DEV_PASSWORD=%PG_DEV_PASSWORD%^
+    -e PG_DEV_PORT=%PG_DEV_PORT%^
     -v %volume%:/var/lib/postresql/data^
-    -p 5435:5432^
+    -p %PG_DEV_EXPOSE%:5432^
     --net pg^
     %image%:%tag%
 
@@ -64,3 +68,6 @@ docker image prune -f -a
 
 rem შევდივართ დოკერის კონტეინერში შელზე
 docker exec -ti %name%-%tag% /bin/bash
+
+rem docker exec -ti pg-branch /bin/bash
+rem cd ../hooks && git pull && cd ../project && git commit --allow-empty -a -m "hello world"

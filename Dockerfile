@@ -38,7 +38,7 @@ RUN echo "{\n\
 
 ARG GIT_USER_EMAIL
 ARG GIT_USER_NAME
-
+ARG IMAGE_VERSION
 
 # git config add
 RUN git config --global user.email $GIT_USER_EMAIL
@@ -46,5 +46,14 @@ RUN git config --global user.name $GIT_USER_NAME
 
 EXPOSE 5432
 
+#ADD IMAGE_VERSION /tmp/bustcache
+
 RUN cd /usr/src && git clone https://github.com/hazardland/hook.pg.git ./hooks
-RUN mkdir -p /usr/src/project && cd /usr/src/project && git init && touch readme.md && git config core.hooksPath ../hooks/dev
+RUN cat /usr/src/hooks/gitconfig >> ~/.gitconfig
+
+# SERVER
+RUN mkdir -p /usr/src/server && cd /usr/src/server && git init && git config core.hooksPath ../hooks/branch
+
+# DEV
+RUN mkdir -p /usr/src/project && cd /usr/src/project && git init && git config core.hooksPath ../hooks/dev && git remote add origin /usr/src/server/.git
+
