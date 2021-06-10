@@ -10,7 +10,7 @@ rem ჩამოგვაქვს ბოლო ვერსია ყველ�
 git pull
 
 set image=pg-dev
-set tag=0.0.17
+set tag=0.0.20
 set name=%image%
 
 rem აქ ხდება .config ფაილის კონტენტის ცვლადებად გამოცხადება
