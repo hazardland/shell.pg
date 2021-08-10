@@ -52,7 +52,7 @@ RUN cd /usr/src && git clone https://github.com/hazardland/hook.pg.git ./hooks
 RUN cat /usr/src/hooks/gitconfig >> ~/.gitconfig
 
 # SERVER
-RUN mkdir -p /usr/src/server && cd /usr/src/server && git init && git config core.hooksPath ../hooks/branch
+RUN mkdir -p /usr/src/server && cd /usr/src/server && git init && git config core.hooksPath ../hooks/branch && git commit -am "init" --allow-empty
 
 # DEV
 RUN mkdir -p /usr/src/project && cd /usr/src/project && git init && git config core.hooksPath ../hooks/dev && git remote add origin /usr/src/server/.git
