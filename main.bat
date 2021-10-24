@@ -10,7 +10,7 @@ rem ჩამოგვაქვს ბოლო ვერსია ყველ�
 rem git pull
 
 set image=pg-dev
-set tag=0.0.47
+set tag=0.0.50
 set name=%image%
 
 rem აქ ხდება .config ფაილის კონტენტის ცვლადებად გამოცხადება
@@ -48,6 +48,10 @@ docker run -d --name %name%-%tag%^
     -e PG_DEV_USERNAME=%PG_DEV_USERNAME%^
     -e PG_DEV_PASSWORD=%PG_DEV_PASSWORD%^
     -e PG_DEV_PORT=%PG_DEV_PORT%^
+    -e PG_MASTER_SERVER=%PG_MASTER_SERVER%^
+    -e PG_MASTER_DATABASE=%PG_MASTER_DATABASE%^
+    -e PG_MASTER_BRANCH=%PG_MASTER_BRANCH%^
+    -e PG_STAGING_BRANCH=%PG_STAGING_BRANCH%^
     -v %volume%:/var/lib/postresql/data^
     -p %PG_DEV_EXPOSE%:5432^
     --net pg^
